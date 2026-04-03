@@ -1,0 +1,15 @@
+Mern Estate Notes 
+
+1. We need to install a package.json file in the root of our project before creating the server bacause actually when we deploy our website, the render platform is going to check the root of our website consider both of the backend and the ront end.
+
+So the back end, the package.json should be inside the root.
+
+2. in the package,json use "type" : "module" ....if you don,t want to use type module then you need to use the require instead of import
+3. in the script of package .json add 
+"dev": "nodemon api/index.js",
+to use nodemon when i run command npm run dev and
+   "start": "node api/index.js"
+while each time i use npm start i want to use node
+the reason i added this start is when we want to deploy the application to render, we need to add this npm start because the render needs to run our backend with using node and you don't need to actually install nodemon in the dependency, you can install it in the dev dependency so you could just add dev at the end and install it there because we don't use this nodemon in the production.
+
+4. We cnnot just make the env file directly , it will show error , install a package called dotenv before making the env file.
