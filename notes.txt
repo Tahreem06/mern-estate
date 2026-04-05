@@ -16,4 +16,8 @@ the reason i added this start is when we want to deploy the application to rende
 
 5. We add the timstamp true in schema of the user to give two important informations to the databae one is the time of creation of the user and also the other one is time of update of the user. It will be usable when we sort the data by time or latest.
 
+6. To encode the password, install the package called bcryptjs
+After getting password from the body, just use 
+const hashedPassword = bcryptjs.hashSync(password, 10);
+where hashSync means to wait for the hash so we don't need to use await here and then we are gonna pass password and the number (something called SALT (which is the number of round for creating the salt) salt is just a hash number or variable, which is going to be combined with our password and make it encrypted)
 
