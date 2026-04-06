@@ -21,3 +21,5 @@ After getting password from the body, just use
 const hashedPassword = bcryptjs.hashSync(password, 10);
 where hashSync means to wait for the hash so we don't need to use await here and then we are gonna pass password and the number (something called SALT (which is the number of round for creating the salt) salt is just a hash number or variable, which is going to be combined with our password and make it encrypted)
 
+7. For the procedure to make cookie encoded install package jsonwebtoken, then by using it we will make the token by id which will make the cookie ancoded for third parties so can't use it, the token is like SALT.
+
