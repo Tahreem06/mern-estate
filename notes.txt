@@ -23,3 +23,4 @@ where hashSync means to wait for the hash so we don't need to use await here and
 
 7. For the procedure to make cookie encoded install package jsonwebtoken, then by using it we will make the token by id which will make the cookie ancoded for third parties so can't use it, the token is like SALT.
 
+8. We are adding redux toolkit, so that we have access to the use date from different places in our application.Redux Toolkit is available as a package on NPM for use with a module bundler or in a Node application:
