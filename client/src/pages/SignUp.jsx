@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -16,30 +16,29 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-    setLoading(true);
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await res.json();
-    if (data.success===false) {
-      setError(data.message);
+      setLoading(true);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        setError(data.message);
+        setLoading(false);
+        console.log("Server error message: ", data.message);
+        return;
+      }
       setLoading(false);
-      return;
-    }
-    setLoading(false);
-    setError(null);
-    navigate('/sign-in');
+      setError(null);
+      navigate("/sign-in");
     } catch (error) {
       setLoading(false);
-      setError(error.message)
+      setError(error.message);
     }
-    
   };
-
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -69,8 +68,11 @@ export default function SignUp() {
           onChange={handleChange}
         />
 
-        <button disabled={loading} className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-          {loading ? 'Loading...' : 'SIGN UP'}
+        <button
+          disabled={loading}
+          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          {loading ? "Loading..." : "SIGN UP"}
         </button>
       </form>
 

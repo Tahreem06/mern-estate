@@ -25,11 +25,13 @@ app.listen(3000, () => {
 app.use('/api/auth', authRouter);
 
 app.use((err, req, res, next) => {
-    const errorStatus = err.status || 500;
-    const errorMessage = err.message || "Something went wrong!";
+    const errorStatus = err.statusCode || 500;
+    const errorMessage = err.message || "Internal Server Error!";
+    console.error("Backend Error: ", message);
+
     return res.status(errorStatus).json({
         success: false,
-        status: errorStatus,
+        statusCode,
         message: errorMessage,
     });
 })

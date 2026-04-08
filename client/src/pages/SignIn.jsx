@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   signInStart,
   signInSuccess,
@@ -31,11 +31,12 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      
       if (data.success === false) {
         dispatch(signInFailure(data.message));
         return;
       }
-      dispatch(signInSuccess(data.user));
+      dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
       dispatch(signInFailure("An error occurred. Please try again."));
