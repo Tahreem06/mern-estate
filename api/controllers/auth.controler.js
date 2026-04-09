@@ -25,9 +25,13 @@ export const signin = async (req, res, next) => {
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
     const {password: pass, ...rest}= validUser._doc;
     res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(200)
-      .json(rest);
+  .cookie("access_token", token, { 
+    httpOnly: true, 
+    secure: false, // Must be FALSE for localhost/HTTP
+    sameSite: 'lax', // Lax is better for local dev than 'none'
+  })
+  .status(200)
+  .json(rest);
   } catch (error) {
     next(error);
   }
