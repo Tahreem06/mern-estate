@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js"; // ✅ was missing
 import cookieParser from "cookie-parser";
+import listingRouter from "./routes/listing.route.js"; // ✅ was missing
 
 dotenv.config();
 
@@ -23,7 +24,8 @@ app.use(cookieParser());
 
 // ✅ Routes must come AFTER middleware
 app.use('/api/auth', authRouter);
-app.use("/api/user", userRouter); // ✅ now userRouter is imported so this works
+app.use("/api/user", userRouter); 
+app.use("/api/listing", listingRouter); 
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
