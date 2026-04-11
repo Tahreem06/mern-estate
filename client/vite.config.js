@@ -2,26 +2,26 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
-// vite.config.js
 export default defineConfig({
+  plugins: [react()],
   server: {
+    host: true, // Exposes the server to your Chromebook's network
+    port: 5173,
+    hmr: {
+      host: 'localhost',
+      protocol: 'ws',
+    },
+    watch: {
+      usePolling: true,
+    },
     headers: {
-    'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
-  },
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        // Add this configure block to force-forward cookies
-        configure: (proxy, _options) => {
-          proxy.on('proxyRes', (proxyRes, req, res) => {
-            const cookies = proxyRes.headers['set-cookie'];
-            if (cookies) {
-              res.setHeader('set-cookie', cookies);
-            }
-          });
-        },
       },
     },
   },
