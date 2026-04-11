@@ -15,7 +15,7 @@ export default function Profile() {
   console.log(formData);
   console.log(filePerc);
   console.log(fileUploadError);
-  
+
   // 2. useEffect to trigger upload when a file is selected
   useEffect(() => {
     if (file) {
@@ -25,31 +25,49 @@ export default function Profile() {
 
   // 3. Supabase Upload Function
   const handleFileUpload = async (file) => {
-    setFileUploadError(false);
-    const fileName = new Date().getTime() + file.name;
+  setFileUploadError(false);
+  setFilePerc(0);
 
-    const { data, error } = await supabase.storage
-      .from('listing-images') // Match your Supabase bucket name
-      .upload(fileName, file, {
-        onUploadProgress: (progress) => {
-          const percentage = Math.round((progress.loaded / progress.total) * 100);
-          setFilePerc(percentage);
-        },
-      });
+  // Validate file size (2MB max) — mirrors the Firebase rule
+  if (file.size > 2 * 1024 * 1024) {
+    setFileUploadError(true);
+    return;
+  }
 
-    if (error) {
-      setFileUploadError(true);
-      return;
-    }
+  // Validate file type
+  if (!file.type.startsWith('image/')) {
+    setFileUploadError(true);
+    return;
+  }
 
-    // Get the Public URL
-    const { data: urlData } = supabase.storage
-      .from('listing-images')
-      .getPublicUrl(fileName);
+  const fileName = new Date().getTime() + file.name;
 
-    setFormData({ ...formData, avatar: urlData.publicUrl });
-  };
+  // Simulate upload starting (like Firebase's 0% progress event)
+  setFilePerc(50);
 
+  const { data, error } = await supabase.storage
+    .from('listing-images')
+    .upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+
+  if (error) {
+    console.error('Upload error:', error);
+    setFileUploadError(true);
+    setFilePerc(0);
+    return;
+  }
+
+  // Upload done — set to 100% (like Firebase's complete event)
+  setFilePerc(100);
+
+  const { data: urlData } = supabase.storage
+    .from('listing-images')
+    .getPublicUrl(data.path);  // use data.path, not fileName
+
+  setFormData((prev) => ({ ...prev, avatar: urlData.publicUrl }));
+};
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
