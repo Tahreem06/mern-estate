@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.route.js";
+import userRouter from "./routes/user.route.js"; // ✅ was missing
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -18,23 +19,25 @@ mongoose
 const app = express();
 
 app.use(express.json());
-
 app.use(cookieParser());
+
+// ✅ Routes must come AFTER middleware
+app.use('/api/auth', authRouter);
+app.use("/api/user", userRouter); // ✅ now userRouter is imported so this works
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
 
-app.use('/api/auth', authRouter);
-
+// ✅ Fixed the error handler (statusCode and message were not defined)
 app.use((err, req, res, next) => {
-    const errorStatus = err.statusCode || 500;
-    const errorMessage = err.message || "Internal Server Error!";
-    console.error("Backend Error: ", message);
+  const errorStatus = err.statusCode || 500;
+  const errorMessage = err.message || "Internal Server Error!";
+  console.error("Backend Error:", errorMessage); // ✅ was `message`, now `errorMessage`
 
-    return res.status(errorStatus).json({
-        success: false,
-        statusCode,
-        message: errorMessage,
-    });
-})
+  return res.status(errorStatus).json({
+    success: false,
+    statusCode: errorStatus, // ✅ was `statusCode` (undefined), now `errorStatus`
+    message: errorMessage,
+  });
+});
