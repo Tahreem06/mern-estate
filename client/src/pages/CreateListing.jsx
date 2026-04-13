@@ -135,8 +135,12 @@ export default function CreateListing() {
       setLoading(false);  // ✅ consistent casing
       if (data.success === false) {
         setError(data.message);
-      }
+      return;  // ✅ stops navigation if error
+    }
+    // ✅ Only navigate if _id actually exists
+    if (data._id) {
       navigate(`/listing/${data._id}`);
+    }
     } catch (error) {
       setError(error.message);
       setLoading(false);  // ✅ consistent casing
